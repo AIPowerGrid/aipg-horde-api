@@ -1883,7 +1883,7 @@ class Models:
                     description="The message sent",
                     example="Hello Worker!",
                     min_length=1,
-                    max_length=1024 * 10,
+                    max_length=2048 * 10,
                     required=True,
                 ),
                 "origin": fields.String(

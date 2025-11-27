@@ -30,12 +30,7 @@ class ModelReference(PrimaryTimedFunction):
         # We don't want to report on any random model name a client might request
         for _riter in range(10):
             try:
-                ref_json = "https://raw.githubusercontent.com/Haidra-Org/AI-Horde-image-model-reference/main/stable_diffusion.json"
-                if datetime.utcnow() <= datetime(2024, 9, 30):  # Flux Beta
-                    ref_json = (
-                        "https://raw.githubusercontent.com/Haidra-Org/AI-Horde-image-model-reference/refs/heads/flux/stable_diffusion.json"
-                    )
-                    logger.debug("Using flux beta model reference...")
+                ref_json = "https://raw.githubusercontent.com/AIPowerGrid/grid-image-model-reference/main/stable_diffusion.json"
                 self.reference = requests.get(
                     os.getenv(
                         "HORDE_IMAGE_COMPVIS_REFERENCE",
@@ -43,15 +38,7 @@ class ModelReference(PrimaryTimedFunction):
                     ),
                     timeout=2,
                 ).json()
-                diffusers = requests.get(
-                    os.getenv(
-                        "HORDE_IMAGE_DIFFUSERS_REFERENCE",
-                        "https://raw.githubusercontent.com/Haidra-Org/AI-Horde-image-model-reference/main/diffusers.json",
-                    ),
-                    timeout=2,
-                ).json()
-                self.reference.update(diffusers)
-                # logger.debug(self.reference)
+                logger.debug(self.reference)
                 self.stable_diffusion_names = set()
                 for model in self.reference:
                     if self.reference[model].get("baseline") in {
@@ -77,10 +64,17 @@ class ModelReference(PrimaryTimedFunction):
                 self.text_reference = requests.get(
                     os.getenv(
                         "HORDE_IMAGE_LLM_REFERENCE",
-                        "https://raw.githubusercontent.com/db0/AI-Horde-text-model-reference/main/db.json",
+                        "https://raw.githubusercontent.com/Haidra-Org/AI-Horde-image-model-reference/refs/heads/main/stable_diffusion.json",
                     ),
                     timeout=2,
                 ).json()
+                # import json
+
+                # with open("./stable_diffusion.json", "r") as f:
+                #    self.text_reference = json.load(f)
+                #    ),
+                #    timeout=2,
+                # ).json()
                 # logger.debug(self.reference)
                 self.text_model_names = set()
                 for model in self.text_reference:
